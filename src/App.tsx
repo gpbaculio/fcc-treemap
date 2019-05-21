@@ -1,26 +1,41 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from 'react';
+import axios from 'axios';
 
-const App: React.FC = () => {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import { datasets } from './contants';
+
+interface AppProps {}
+interface AppState {
+  load: boolean;
+  data: {
+    name: string;
+    children: {
+      name: string;
+      children: { name: string; category: string; value: string }[];
+    }[];
+  };
+  error: string;
+}
+
+class App extends Component<AppProps, AppState> {
+  state = {
+    load: false,
+    data: {
+      name: '',
+      children: []
+    },
+    error: ''
+  };
+  componentDidMount = async () => {
+    try {
+      const { data } = await axios.get(datasets.videoGames.url);
+      console.log('data ', data);
+    } catch (error) {
+      this.setState({ error });
+    }
+  };
+  render() {
+    return <div className='svg-container' />;
+  }
 }
 
 export default App;
