@@ -6,9 +6,11 @@ import './App.css';
 import { datasets } from './contants';
 
 interface AppProps {}
+
 interface Child {
   id: string;
   name: string;
+  middleName?: string;
   children: NestedChild[];
 }
 interface NestedChild {
@@ -16,16 +18,25 @@ interface NestedChild {
   category: string;
   value: string;
   id: string;
+  middleName?: string;
 }
 interface DataInterface {
   id: string;
   name: string;
+  middleName?: string;
   children: Child[];
 }
 interface AppState {
   load: boolean;
   data: DataInterface;
   error: string;
+}
+interface sumData {
+  category?: string;
+  value?: string;
+  id: string;
+  name: string;
+  children: never[];
 }
 
 class App extends Component<AppProps, AppState> {
@@ -41,6 +52,7 @@ class App extends Component<AppProps, AppState> {
   componentDidMount = async () => {
     try {
       const { data } = await axios.get(datasets.videoGames.url);
+      const d2 = await d3.json(datasets.videoGames.url);
       this.setState(
         {
           data: {
@@ -83,14 +95,17 @@ class App extends Component<AppProps, AppState> {
       .attr('width', width)
       .attr('height', height);
     const { data } = this.state;
-    console.log('createchartdata ', data);
-    var root = d3.hierarchy(data).eachBefore(function(d) {
-      d.data.id = (d.parent ? d.parent.data.id + '.' : '') + d.data.name;
-    });
-    // .sum(d => d.value)
-    // .sort(function(a, b) {
-    //   return b.height - a.height || b.value - a.value;
-    // });
+    var root = d3
+      .hierarchy(data)
+      .eachBefore(function(d) {
+        d.data.id = (d.parent ? d.parent.data.id + '.' : '') + d.data.name;
+      })
+      .sum((d: sumData) => {
+        return d.value ? Number(d.value) : 0;
+      })
+      .sort(function(a, b) {
+        return b.height - a.height ? b.height - a.height : b.value! - a.value!;
+      });
   };
   render() {
     return (
