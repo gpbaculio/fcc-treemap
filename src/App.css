@@ -9,11 +9,6 @@ div.tooltip {
   pointer-events: none;
 }
 
-.svg-container {
-  height: 100vh;
-  width: 100vw;
-}
-
 .url:hover {
   cursor: pointer;
   text-decoration: underline;

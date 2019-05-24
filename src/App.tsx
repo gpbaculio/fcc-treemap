@@ -277,7 +277,7 @@ class App extends Component<AppProps, AppState> {
           {title}
         </h1>
         <div id='description'>{desc}</div>
-        <div className='my-3 svg-container d-flex align-items-center justify-content-center flex-column' />
+        <div className='mx-0 my-3 svg-container d-flex align-items-center justify-content-center flex-column' />
       </div>
     );
   }
